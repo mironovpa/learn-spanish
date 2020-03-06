@@ -1,0 +1,60 @@
+.header {
+  &_filter {
+    font-size: 15px;
+    font-family: 'Roboto Slab', serif;
+
+    .custom-switch {
+      padding-right: 2.25rem;
+      padding-left: 0;
+    }
+
+    .custom-control-input {
+      left: 29%;
+    }
+
+    .custom-control-label {
+      padding-right: 10px;
+      text-decoration: underline;
+    }
+
+    .custom-control-label:hover {
+      cursor: pointer;
+    }
+
+    .custom-control-label:before {
+      left: 100%;
+      top: 0.2rem;
+      outline: none;
+      color: #000;
+    }
+
+    .custom-control-label:after {
+      left: calc(100% + 2px);
+      top: calc(0.21rem + 2px);
+    }
+
+
+    .custom-control-input ~ .custom-control-label::before {
+      box-shadow: none;
+      outline: none;
+      border-color: rgba(204, 204, 204, 1.0);
+    }
+
+    .custom-control-input:focus:not(:checked) ~ .custom-control-label::before {
+      border-color: rgba(204, 204, 204, 1.0);
+      background-color: #ffffff;
+    }
+
+    .custom-control-input:checked ~ .custom-control-label::before {
+      background-color: #fff;
+      border-color: rgba(207, 83, 0, 1.0);
+      color: orange;
+      box-shadow: none;
+      outline: none;
+    }
+
+    .custom-control-input:checked ~ .custom-control-label::after {
+      background-color: #ff7d14;
+    }
+  }
+}

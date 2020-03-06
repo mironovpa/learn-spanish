@@ -1,0 +1,19 @@
+.header {
+  position: fixed;
+  width: 100%;
+  height: 45px;
+  top: 0;
+  background-color: #ff7d14;
+  font-family: 'Trade Winds', cursive;
+  font-size: 22px;
+  text-transform: uppercase;
+  color: #000;
+  &_login {
+    font-size: 15px;
+    font-family: 'Roboto Slab', serif;
+  }
+  &_online {
+    font-size: 15px;
+    font-family: 'Roboto Slab', serif;
+  }
+}
