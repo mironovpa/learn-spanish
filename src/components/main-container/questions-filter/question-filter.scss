@@ -1,0 +1,28 @@
+.question_filter {
+  padding-top: 10px;
+  &_first_row {
+    padding-bottom: 10px;
+  }
+  &_first_row:hover {
+    cursor: pointer;
+  }
+  &_title {
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  &_main {
+    transition: .5s all;
+    .custom-control {
+      display: flex; // чтобы использовать колонки
+    }
+  }
+  &_params {
+    &_text {
+      text-decoration: underline;
+    }
+  }
+  .fas {
+    font-size: 21px;
+  }
+}
