@@ -1,0 +1,45 @@
+.insert_word {
+  &_mark_text {
+    position: absolute;
+    display: none;
+    top: 40%;
+    left: 50%;
+    z-index: 9999;
+    font-size: 18px;
+    font-weight: bold;
+    color: green;
+  }
+  &_mark_text_green {
+    color: green
+  }
+  &_mark_text_red {
+    color: red
+  }
+}
+
+@keyframes mark_smoke_up_input {
+  0% {
+    top: 40%;
+    opacity: 1.0;
+  }
+  10% {
+    left: 49.75%;
+  }
+  30% {
+    left: 50.25%;
+  }
+  50% {
+    left: 49.75%;
+  }
+  70% {
+    left: 50.25%;
+  }
+  90% {
+    left: 49.75%;
+  }
+  100% {
+    top: -10%;
+    left: 50%;
+    opacity: 0.0;
+  }
+}

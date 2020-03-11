@@ -20,17 +20,17 @@ class QuestionFilter extends React.Component {
     }
     checkBoxChange = (event, id) => {
         this.props.toggleFilterElement(id, event.target.checked);
+        this.props.setQuestionComponentWithFilterID();
         const newState = this.props.filterSettings;
         console.log(newState.filter(el => el.filter).map(el => el.filter));
     }
     render() {
         const {filterSettings} = this.props;
-        console.log(filterSettings.map((el) => el.filter))
         const openFilterIcon = (this.state.isMainFilterOpened) ? <i className="fas fa-angle-up"></i> : <i className="fas fa-angle-down"></i>;
         let choosedFilters = filterSettings.filter((el) => el.filter);
         if(choosedFilters.length === 0) choosedFilters = `Keine Aufgabe wurden gewahlt`;
         else if(choosedFilters.length === filterSettings.length) choosedFilters = `ALLE`;
-        else if(choosedFilters.map(el => el.name).toString().length > 40) {
+        else if(choosedFilters.map(el => el.name).toString().length > 45) {
             choosedFilters = `${choosedFilters.slice(0, 1).map(el => ` ${el.name}`).toString()} und ${choosedFilters.length - 1} weitere`;
         } else {
             choosedFilters = choosedFilters.map(el => ` ${el.name}`).toString();
@@ -99,6 +99,9 @@ const mapDispatchToProps = dispatch => {
     return {
         toggleFilterElement: (id, newState) => {
             dispatch({type: "TOGGLE_FILTER_ELEMENT", id, newState});
+        },
+        setQuestionComponentWithFilterID: () => {
+            dispatch({type: "SET_QUESTION_COMPONENT_WITH_FILTER_ID"});
         }
     }
 }

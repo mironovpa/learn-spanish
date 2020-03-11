@@ -1,0 +1,47 @@
+.ser_estar_answers {
+  button {
+    height: 60px;
+    transition: .3s all;
+  }
+  &_mark_text {
+    position: absolute;
+    display: none;
+    top: 30%;
+    left: 80%;
+    z-index: 9999;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  }
+  &_mark_text_green {
+    color: green
+  }
+  &_mark_text_red {
+    color: red
+  }
+}
+
+@keyframes mark_smoke_up_buttons {
+  0% {
+    top: 30%;
+    opacity: 1.0;
+  }
+  10% {
+    left: 79.75%;
+  }
+  30% {
+    left: 80.25%;
+  }
+  50% {
+    left: 79.75%;
+  }
+  70% {
+    left: 80.25%;
+  }
+  90% {
+    left: 79.75%;
+  }
+  100% {
+    top: -10%;
+    left: 80%;
+    opacity: 0.0;
+  }
+}

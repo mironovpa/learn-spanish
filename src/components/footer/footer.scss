@@ -1,0 +1,24 @@
+.footer {
+  background-color: #ff7d14;
+  nav {
+    line-height: 1;
+  }
+  &_navigation_ul {
+    list-style-type: none;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    &_li {
+      float: left;
+      vertical-align: center;
+      a {
+        display: block;
+        text-align: center;
+        padding: 15px 10px;
+        color: black;
+      }
+    }
+  }
+}
+
+

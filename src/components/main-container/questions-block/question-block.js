@@ -1,14 +1,38 @@
 import React from "react";
+import {connect} from "react-redux";
 
-export default class QuestionBlock extends React.Component {
+class QuestionBlock extends React.Component {
+    componentDidMount() {
+        this.props.setQuestionComponentWithFilterID();
+        // setInterval(() => {
+        //     this.props.setQuestionComponentWithFilterID();
+        // }, 1000);
+    }
+
     render() {
+        console.log("QUESTION BLOCK WAS RERENDERED!");
         return (
-            <div className="row">
-                Question Block
-            </div>
+            (this.props.currentQuestionComponent === null) ? <div>Загрузка</div> : this.props.currentQuestionComponent
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        filterSettings: state.filterSettings,
+        currentQuestionComponent: state.currentQuestionComponent
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        setQuestionComponentWithFilterID: () => {
+            dispatch({type: "SET_QUESTION_COMPONENT_WITH_FILTER_ID"});
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionBlock);
 /*
     -Общий компонент QuestionBlock
     -QB занимается случайным выбором типа следующей задачи исходя из фильтра

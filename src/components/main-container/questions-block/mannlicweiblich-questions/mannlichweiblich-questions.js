@@ -1,10 +1,10 @@
 import React from "react";
-import {connect} from "react-redux";
-import {callNextQuestion} from "../../../../services/shared";
 import SharedQuestions from "../shared-questions/shared-questions";
-import "./serestar-questions.scss";
+import {connect} from "react-redux";
+import "./mannlichweiblich-questions.scss";
+import {callNextQuestion} from "../../../../services/shared";
 
-class SerEstarQuestions extends React.Component {
+class MannlichWeiblichQuestions extends React.Component {
     state = {
         question: {
             sentence: null,
@@ -17,8 +17,8 @@ class SerEstarQuestions extends React.Component {
         this.setState({question: this.getRandomQuestion()});
     }
     getRandomQuestion = () => {
-        const {serEstar} = this.props;
-        return serEstar[Math.floor(Math.random()*serEstar.length)]
+        const {mannlichWeiblich} = this.props;
+        return mannlichWeiblich[Math.floor(Math.random()*mannlichWeiblich.length)]
     }
 
     resetBtnClasses = (node) => {
@@ -29,18 +29,18 @@ class SerEstarQuestions extends React.Component {
         if(!this.state.answerClicked) {
             this.setState({answerClicked: true});
             const {question, mark} = this.state;
-            const buttonNodes = document.querySelectorAll(`.ser_estar_answers button`);
+            const buttonNodes = document.querySelectorAll(`.mannlich_weiblich_answers button`);
             for(let i = 0; i < buttonNodes.length; i++) {
                 this.resetBtnClasses(buttonNodes[i]);
                 (buttonNodes[i].innerText.toLowerCase() === question.answer.toLowerCase()) ? buttonNodes[i].classList.add("btn-success") : buttonNodes[i].classList.add("btn-danger");
             }
-            const node = document.getElementById("ser_estar_answers_mark_text");
+            const node = document.getElementById("mannlich_weiblich_answers_mark_text");
             event.target.appendChild(node);
             if(answer.toLowerCase() === question.answer.toLowerCase()) {
-                node.classList.add(`ser_estar_answers_mark_text_green`);
+                node.classList.add(`mannlich_weiblich_answers_mark_text_green`);
                 node.innerText = `+${mark}`;
             } else {
-                node.classList.add(`ser_estar_answers_mark_text_red`);
+                node.classList.add(`mannlich_weiblich_answers_mark_text_red`);
                 node.innerText = `-${mark}`;
             }
             node.style.display = `block`;
@@ -54,14 +54,14 @@ class SerEstarQuestions extends React.Component {
         const {question} = this.state;
         return (
             <div>
-                <SharedQuestions questionText={<span>Wahlen Sie zwischen <strong>"Ser"</strong> und <strong>"Estar"</strong>:<br/> <strong>{question.sentence}</strong></span>}/>
-                <div className="row justify-content-around ser_estar_answers">
-                    <div id="ser_estar_answers_mark_text" className="ser_estar_answers_mark_text">+5</div>
+                <SharedQuestions questionText={<span>Wahlen Sie richtigen Artikel: <strong>{question.sentence}</strong></span>}/>
+                <div className="row justify-content-around mannlich_weiblich_answers">
+                    <div id="mannlich_weiblich_answers_mark_text" className="mannlich_weiblich_answers_mark_text">+5</div>
                     <div className="col-sm-6 mb-1">
-                        <button className="btn btn-info btn-lg btn-block" onClick={(event) => { this.onButtonClicked(event, "ser") }}>SER</button>
+                        <button className="btn btn-info btn-lg btn-block" onClick={(event) => { this.onButtonClicked(event, "el") }}>EL</button>
                     </div>
                     <div className="col-sm-6 mb-1">
-                        <button className="btn btn-warning btn-lg btn-block" onClick={(event) => { this.onButtonClicked(event, "estar") }}>ESTAR</button>
+                        <button className="btn btn-warning btn-lg btn-block" onClick={(event) => { this.onButtonClicked(event, "la") }}>LA</button>
                     </div>
                 </div>
             </div>
@@ -69,10 +69,9 @@ class SerEstarQuestions extends React.Component {
     }
 }
 
-
 const mapStateToProps = (state) => {
     return {
-        serEstar: state.serEstar
+        mannlichWeiblich: state.mannlichWeiblich
     }
 };
 
@@ -81,4 +80,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SerEstarQuestions);
+export default connect(mapStateToProps, mapDispatchToProps)(MannlichWeiblichQuestions);

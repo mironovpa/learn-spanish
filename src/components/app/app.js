@@ -2,6 +2,7 @@ import React from "react";
 
 import Header from "../header/header";
 import MainContainer from "../main-container/main-container";
+import Footer from "../footer/footer";
 
 export default class App extends React.Component {
     render() {
@@ -9,6 +10,7 @@ export default class App extends React.Component {
             <div>
                 <Header/>
                 <MainContainer/>
+                <Footer/>
             </div>
         )
     }
