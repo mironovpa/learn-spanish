@@ -1,0 +1,11 @@
+.login {
+  &_input {
+    &_email {
+      &_false {
+        &::placeholder {
+          color: red;
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import {callNextQuestion} from "../../../../services/shared";
+import {callNextQuestion, updateDatabasePoints} from "../../../../services/shared";
 import SharedQuestions from "../shared-questions/shared-questions";
 import {connect} from "react-redux";
 import "./muymucho-questions.scss";
@@ -39,15 +39,15 @@ class MuyMuchoQuestions extends React.Component {
             if(answer.toLowerCase() === question.answer.toLowerCase()) {
                 node.classList.add(`muy_mucho_answers_mark_text_green`);
                 node.innerText = `+${mark}`;
+                updateDatabasePoints(mark);
             } else {
                 node.classList.add(`muy_mucho_answers_mark_text_red`);
                 node.innerText = `-${mark}`;
+                updateDatabasePoints(-mark);
             }
             node.style.display = `block`;
             node.style.animation = `mark_smoke_up_buttons 0.7s linear forwards`;
-            setTimeout(() => {
-                callNextQuestion().then(() => null);
-            }, 1500);
+            setTimeout(callNextQuestion, 1500);
         }
     }
     render() {
@@ -77,6 +77,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        setUserPoints: (points) => {
+            dispatch({type: "SET_USER_POINTS", points});
+        }
     }
 }
 

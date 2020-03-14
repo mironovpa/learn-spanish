@@ -1,6 +1,7 @@
 import React from "react";
 import "./dictionary-questions.scss"
 import {connect} from "react-redux";
+import {callNextQuestion, updateDatabasePoints} from "../../../../services/shared";
 class ButtonAnswers extends React.Component {
     state = {
         trueAnswer: { spanish: null, german: null },
@@ -15,7 +16,6 @@ class ButtonAnswers extends React.Component {
         mark: 5
     };
     componentDidMount() {
-        console.log("button answers mounted!");
         const {answersArray} = this.props;
         const shuffledArray = [...this.shuffleArray(answersArray)];
         this.setState({
@@ -62,20 +62,16 @@ class ButtonAnswers extends React.Component {
             if(answersArray[3].spanish === answer) {
                 node.classList.add(`button_answers_mark_text_green`);
                 node.innerText = `+${this.state.mark}`;
+                updateDatabasePoints(this.state.mark)
             }
             else {
                 node.classList.add(`button_answers_mark_text_red`);
                 node.innerText = `-${this.state.mark}`;
+                updateDatabasePoints(-this.state.mark)
             }
             node.style.display = `block`;
             node.style.animation = `mark_smoke_up_buttons 0.7s linear forwards`;
-            setTimeout(() => {
-                this.callNextQuestion().then(() => null);
-            }, 1100);
-            // setTimeout(() => {
-            //     this.props.resetQuestionComponent();
-            //     this.props.setQuestionComponentWithFilterID();
-            // }, 1000);
+            setTimeout(callNextQuestion, 1500);
 
         }
     }

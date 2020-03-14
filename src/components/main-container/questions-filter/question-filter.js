@@ -7,22 +7,18 @@ import { connect } from 'react-redux'
 class QuestionFilter extends React.Component {
     state = {
         isMainFilterOpened: false
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log("COMPONENT WAS UPDATED")
-    }
+    };
 
     toggleMainFilter = (event) => {
+        const {isMainFilterOpened} = this.state;
         const cList = document.getElementById("question_filter_first_row").classList;
-        if(this.state.isMainFilterOpened && cList.contains("collapsed")) this.setState({isMainFilterOpened: false})
-        else if(!this.state.isMainFilterOpened && !cList.contains("collapsed")) this.setState({isMainFilterOpened: true})
-    }
+        if(isMainFilterOpened && cList.contains("collapsed")) this.setState({isMainFilterOpened: false})
+        else if(!isMainFilterOpened && !cList.contains("collapsed")) this.setState({isMainFilterOpened: true})
+    };
     checkBoxChange = (event, id) => {
-        this.props.toggleFilterElement(id, event.target.checked);
-        this.props.setQuestionComponentWithFilterID();
-        const newState = this.props.filterSettings;
-        console.log(newState.filter(el => el.filter).map(el => el.filter));
+        const {toggleFilterElement, setQuestionComponentWithFilterID} = this.props;
+        toggleFilterElement(id, event.target.checked);
+        setQuestionComponentWithFilterID();
     }
     render() {
         const {filterSettings} = this.props;
@@ -39,22 +35,21 @@ class QuestionFilter extends React.Component {
             <div className="row question_filter">
                 <div className="col-sm-12">
                     <div className="row question_filter_first_row" href="#question_filter_main" id="question_filter_first_row" data-toggle="collapse" role="button" aria-expanded="false" onClick={this.toggleMainFilter}>
-                        <div className="col-sm-3 text-center question_filter_title">
+                        <div className="col-sm-3 col-2 text-center question_filter_title">
                             <span>Filter</span>
                         </div>
-                        <div className="col-sm-8 question_filter_params">
+                        <div className="col-sm-8 col-8 question_filter_params">
                             {choosedFilters}
                         </div>
-                        <div className="col-sm-1">
+                        <div className="col-sm-1 col-2">
                             {openFilterIcon}
                         </div>
                     </div>
                 </div>
                 <div className="col-sm-12 question_filter_main collapse" id="question_filter_main">
                     <div className="row custom-control custom-checkbox">
-
                         <div className="col-sm-5">
-                            <h5>Ubersetzung/Verstandniss</h5>
+                            <h5 className="question_filter_title_h5">Übersetzung</h5>
                             <ul>
                                 <li><input type="checkbox" className="custom-control-input" id="filter-id-0" defaultChecked={filterSettings[0].filter} onChange={(event) => {this.checkBoxChange(event, 0)}}/>
                                     <label className="custom-control-label" htmlFor="filter-id-0">{filterSettings[0].name}</label></li>
@@ -76,7 +71,7 @@ class QuestionFilter extends React.Component {
                             </ul>
                         </div>
                         <div className="col-sm-5">
-                            <h5>Anderes</h5>
+                            <h5>Andere</h5>
                             <ul>
                                 <li><input type="checkbox" className="custom-control-input" id="filter-id-6" defaultChecked={filterSettings[6].filter} onChange={(event) => {this.checkBoxChange(event, 6)}}/>
                                     <label className="custom-control-label" htmlFor="filter-id-6">{filterSettings[6].name}</label></li>

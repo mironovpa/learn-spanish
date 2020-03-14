@@ -2,7 +2,7 @@ import React from "react";
 import SharedQuestions from "../shared-questions/shared-questions";
 import {connect} from "react-redux";
 import "./mannlichweiblich-questions.scss";
-import {callNextQuestion} from "../../../../services/shared";
+import {callNextQuestion, updateDatabasePoints} from "../../../../services/shared";
 
 class MannlichWeiblichQuestions extends React.Component {
     state = {
@@ -39,15 +39,15 @@ class MannlichWeiblichQuestions extends React.Component {
             if(answer.toLowerCase() === question.answer.toLowerCase()) {
                 node.classList.add(`mannlich_weiblich_answers_mark_text_green`);
                 node.innerText = `+${mark}`;
+                updateDatabasePoints(this.state.mark);
             } else {
                 node.classList.add(`mannlich_weiblich_answers_mark_text_red`);
                 node.innerText = `-${mark}`;
+                updateDatabasePoints(-this.state.mark);
             }
             node.style.display = `block`;
             node.style.animation = `mark_smoke_up_buttons 0.7s linear forwards`;
-            setTimeout(() => {
-                callNextQuestion().then(() => null);
-            }, 1500);
+            setTimeout(callNextQuestion, 1500);
         }
     }
     render() {
@@ -77,6 +77,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        setUserPoints: (points) => {
+            dispatch({type: "SET_USER_POINTS", points});
+        }
     }
 }
 

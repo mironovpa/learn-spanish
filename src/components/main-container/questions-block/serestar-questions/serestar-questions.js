@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {callNextQuestion} from "../../../../services/shared";
+import {callNextQuestion, updateDatabasePoints} from "../../../../services/shared";
 import SharedQuestions from "../shared-questions/shared-questions";
 import "./serestar-questions.scss";
 
@@ -39,15 +39,15 @@ class SerEstarQuestions extends React.Component {
             if(answer.toLowerCase() === question.answer.toLowerCase()) {
                 node.classList.add(`ser_estar_answers_mark_text_green`);
                 node.innerText = `+${mark}`;
+                updateDatabasePoints(mark);
             } else {
                 node.classList.add(`ser_estar_answers_mark_text_red`);
                 node.innerText = `-${mark}`;
+                updateDatabasePoints(-mark);
             }
             node.style.display = `block`;
             node.style.animation = `mark_smoke_up_buttons 0.7s linear forwards`;
-            setTimeout(() => {
-                callNextQuestion().then(() => null);
-            }, 1500);
+            setTimeout(callNextQuestion, 1500);
         }
     }
     render() {
@@ -78,6 +78,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        setUserPoints: (points) => {
+            dispatch({type: "SET_USER_POINTS", points});
+        }
     }
 }
 

@@ -1,7 +1,12 @@
 import React from "react";
 import SharedQuestions from "../shared-questions/shared-questions";
 import {connect} from "react-redux";
-import {replaceAllLettersToEnglish, callNextQuestion, resetMarkNodeStyle} from "../../../../services/shared";
+import {
+    replaceAllLettersToEnglish,
+    callNextQuestion,
+    resetMarkNodeStyle,
+    updateDatabasePoints
+} from "../../../../services/shared";
 import "./verbconjugation-questions.scss";
 
 class VerbConjugationQuestions extends React.Component {
@@ -40,7 +45,10 @@ class VerbConjugationQuestions extends React.Component {
     }
     componentDidMount() {
         const randomQuestion = this.getRandomQuestion();
-        this.setState({questionTitle: randomQuestion[0], questionArray: randomQuestion.slice(1)}, () => {console.log(this.state.questionArray, this.state.questionTitle)});
+        this.setState({
+            questionTitle: randomQuestion[0],
+            questionArray: randomQuestion.slice(1)
+        });
     }
     onButtonClicked = () => {
         if(!this.state.sendButtonDisabled) {
@@ -50,10 +58,7 @@ class VerbConjugationQuestions extends React.Component {
             const node = document.getElementById("conjugation_answers_mark_text");
             resetMarkNodeStyle(node);
             for(let i = 0; i < 6; i++) {
-                console.log(inputsNodeCollection[i].value.toLowerCase())
-                console.log(questionArray[i].toLowerCase())
                 if(replaceAllLettersToEnglish(inputsNodeCollection[i].value.toLowerCase()) === replaceAllLettersToEnglish(questionArray[i].toLowerCase())) {
-                    console.log("True")
                     trueAnswers++;
                     inputsNodeCollection[i].readOnly = true;
                     inputsNodeCollection[i].style.border = `2px solid green`;
@@ -66,22 +71,16 @@ class VerbConjugationQuestions extends React.Component {
             if(trueAnswers === 6) {
                 this.setState({sendButtonDisabled: true});
                 node.classList.replace(`conjugation_answers_mark_text_red`, `conjugation_answers_mark_text_green`);
-                // node.classList.add(`conjugation_answers_mark_text_green`);
                 node.innerText = `+${positiveMark}`;
-                setTimeout(() => {
-                    callNextQuestion().then(() => null);
-                }, 1500);
+                updateDatabasePoints(positiveMark);
+                setTimeout(callNextQuestion, 1500);
             } else {
                 node.classList.add(`conjugation_answers_mark_text_red`);
                 node.innerText = `-${negativeMark}`;
+                updateDatabasePoints(-negativeMark);
                 if(errors === 2) {
                     this.setState({sendButtonDisabled: true});
-                    console.log("LOSE AND NEXT QUESTION");
-                    setTimeout(() => {
-                        callNextQuestion().then(() => null);
-                    }, 1500);
-                } else {
-                    console.log("There are some mistakes!");
+                    setTimeout(callNextQuestion, 1500);
                 }
                 this.setState((state) => {
                     return {
@@ -100,7 +99,7 @@ class VerbConjugationQuestions extends React.Component {
                 <div className="row justify-content-around mb-2">
                     {this.createAnswersGridTemplate()}
                 </div>
-                <div className="row justify-content-around">
+                <div className="row justify-content-around pl-3 pr-3 pl-sm-0 pr-sm-0">
                     <button className="btn btn-success btn-block col-sm-12" onClick={this.onButtonClicked}>
                         ANTWORTEN UBERPRUFEN | <small>VERSUCH: {errors}/3</small>
                         <div id="conjugation_answers_mark_text" className="conjugation_answers_mark_text">+5</div>
@@ -119,6 +118,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        setUserPoints: (points) => {
+            dispatch({type: "SET_USER_POINTS", points});
+        }
     }
 }
 

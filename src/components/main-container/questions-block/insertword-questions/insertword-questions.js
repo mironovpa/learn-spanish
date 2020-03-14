@@ -1,7 +1,12 @@
 import React from "react";
 import SharedQuestions from "../shared-questions/shared-questions";
 import {connect} from "react-redux";
-import {callNextQuestion, replaceAllLettersToEnglish, resetMarkNodeStyle} from "../../../../services/shared";
+import {
+    callNextQuestion,
+    replaceAllLettersToEnglish,
+    resetMarkNodeStyle,
+    updateDatabasePoints
+} from "../../../../services/shared";
 import "./insertword-questions.scss"
 
 class InsertWordQuestions extends React.Component {
@@ -14,42 +19,39 @@ class InsertWordQuestions extends React.Component {
         negativeMark: 5,
         errors: 0,
         sendButtonDisabled: false
-    }
+    };
     getRandomQuestion = () => {
         const {insertWord} = this.props;
         return insertWord[Math.floor(Math.random()*insertWord.length)]
     };
     componentDidMount() {
-        console.log("Insert Word Did Mount!");
-        console.log(this.getRandomQuestion());
-        const question = this.getRandomQuestion();
+        let {answer, sentence} = this.getRandomQuestion();
         let helpString = "";
-        for(let i = 0; i < question.answer.length; i++) {
-            (question.answer[i] === " ") ? helpString+= ` ` :  helpString+= `_`
+        for(let i = 0; i < answer.length; i++) {
+            (answer[i] === " ") ? helpString+= ` ` :  helpString+= `_`
         }
-        question.sentence = question.sentence.replace(/\*/, helpString);
-        this.setState({question});
+        sentence = sentence.replace(/\*/, helpString);
+        this.setState({question: { sentence, answer } });
     }
-
     onAnswerSubmitted = (event) => {
         event.preventDefault();
-        const {question, sendButtonDisabled} = this.state;
+        const {question, sendButtonDisabled, positiveMark, negativeMark} = this.state;
         if(!sendButtonDisabled) {
             const node = document.getElementById("insert_word_mark_text");
             resetMarkNodeStyle(node);
             node.style.display = `block`;
             if(replaceAllLettersToEnglish(event.target[0].value.toLowerCase()) === replaceAllLettersToEnglish(question.answer.toLowerCase())) {
                 this.setState({sendButtonDisabled: true});
-                node.innerText = `+${this.state.positiveMark}`;
+                node.innerText = `+${positiveMark}`;
                 node.style.animation = `mark_smoke_up_input 0.7s linear forwards`;
                 node.classList.replace(`insert_word_mark_text_red`,`insert_word_mark_text_green`);
-                setTimeout(() => {
-                    callNextQuestion().then(() => null);
-                }, 1500);
+                updateDatabasePoints(positiveMark);
+                setTimeout(callNextQuestion, 1500);
             } else {
-                node.innerText = `-${this.state.negativeMark}`;
+                node.innerText = `-${negativeMark}`;
                 node.style.animation = `mark_smoke_up_input 0.7s linear forwards`;
                 node.classList.add(`insert_word_mark_text_red`);
+                updateDatabasePoints(-negativeMark);
                 this.setState((state) => {
                     let {errors} = state;
                     return {
@@ -61,9 +63,7 @@ class InsertWordQuestions extends React.Component {
                         this.setState({sendButtonDisabled: true});
                         document.getElementById("insert_word_input_area").style.color = "green";
                         document.getElementById("insert_word_input_area").value = question.answer;
-                        setTimeout(() => {
-                            callNextQuestion().then(() => null);
-                        }, 1500);
+                        setTimeout(callNextQuestion, 1500);
                     }
                 });
             }
@@ -71,7 +71,7 @@ class InsertWordQuestions extends React.Component {
     }
 
     render() {
-        const {question} = this.state;
+        const {question, errors} = this.state;
         return (
             <div>
                 <SharedQuestions questionText={<span>Fugen Sie richtiges Wort ein: <br/><strong>{question.sentence}</strong></span>}/>
@@ -82,7 +82,7 @@ class InsertWordQuestions extends React.Component {
                                 <div className="insert_word_mark_text" id="insert_word_mark_text"><span>+20</span></div>
                                 <input type="text" className="form-control" id="insert_word_input_area" placeholder="Schreiben Sie Ihre Antwort hier!"/>
                                 <small className="form-text text-muted">
-                                    Fehler: {this.state.errors}/3
+                                    Fehler: {errors}/3
                                 </small>
                             </div>
                             <button type="submit" className="btn btn-primary col-sm-1">Enter</button>
@@ -102,6 +102,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        setUserPoints: (points) => {
+            dispatch({type: "SET_USER_POINTS", points});
+        }
     }
 }
 

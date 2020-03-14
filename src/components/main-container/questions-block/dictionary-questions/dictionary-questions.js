@@ -27,20 +27,17 @@ class DictionaryQuestions extends React.Component {
             while (answersArray[i].german === randomQuestion.german);
         }
         answersArray.push(randomQuestion);
-        console.log(randomQuestion);
-        console.log(answersArray);
         return(answersArray);
     }
     componentDidMount() {
     }
 
     render() {
-        console.log("DICTIONARY-QUESTIONS WAS RERENDERED!");
         if(+this.props.type) {
             let question = this.getRandomNotPhraseQuestion();
             return (
                 <div>
-                    <SharedQuestions questionText={<span>Ubersetzen und schreiben Sie: <strong>{question.german}</strong></span>}/>
+                    <SharedQuestions questionText={<span>Geben Sie richtige Übersetzung für das Wort ein: <br/><strong>{question.german}</strong></span>}/>
                     <InputAnswers question={question}/>
                 </div>
             )
@@ -48,7 +45,7 @@ class DictionaryQuestions extends React.Component {
             let answersArray = this.getAllAnswersArray();
             return (
                 <div>
-                    <SharedQuestions questionText={<span>Ubersetzen Sie: <strong>{answersArray[3].german}</strong></span>}/>
+                    <SharedQuestions questionText={<span>Wählen Sie richtige Übersetzung für das Wort: <br/><strong>{answersArray[3].german}</strong></span>}/>
                     <ButtonAnswers answersArray={answersArray}/>
                 </div>
             )

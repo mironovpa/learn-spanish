@@ -19,6 +19,17 @@
       }
     }
   }
+  &_active_link {
+    font-weight: bold;
+  }
+}
+
+@media (max-width: 500px) {
+  .footer {
+    &_copyrights {
+      display: none;
+    }
+  }
 }
 
 

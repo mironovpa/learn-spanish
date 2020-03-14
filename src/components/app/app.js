@@ -1,17 +1,69 @@
 import React from "react";
+import {
+    Switch,
+    Route
+} from "react-router-dom";
 
 import Header from "../header/header";
 import MainContainer from "../main-container/main-container";
 import Footer from "../footer/footer";
+import {connect} from "react-redux";
 
-export default class App extends React.Component {
+class App extends React.Component {
+    componentDidMount() {
+        const {setLoginData, setLoginStatusTrue, loginStatus} = this.props;
+        if(loginStatus === false) {
+            const token = window.localStorage.getItem(`token`);
+            if(token) {
+                fetch(`http://127.0.0.1:3001/checklogin`, {
+                    method: 'POST',
+                    body: JSON.stringify(token)
+                })
+                    .then((response) => {return response.json()})
+                    .then((data) => {
+                        const {status, name, email, points} = data;
+                        if(status === true) {
+                            setLoginData(name, email, points);
+                            setLoginStatusTrue();
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            }
+        }
+    }
+
     render() {
         return (
             <div>
                 <Header/>
-                <MainContainer/>
+                <Switch>
+                    <Route path="/">
+                        <MainContainer/>
+                    </Route>
+                </Switch>
                 <Footer/>
             </div>
         )
     }
 }
+
+
+const mapStateToProps = (state) => {
+    return {
+        loginStatus: state.loginStatus,
+        userData: state.loginData
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        setLoginStatusTrue: () => {
+            dispatch({type: "SET_LOGIN_STATUS_TRUE"});
+        },
+        setLoginData: (login, email, points) => {
+            dispatch({type: "SET_LOGIN_DATA", login, email, points});
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

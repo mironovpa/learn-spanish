@@ -6,7 +6,6 @@ export default class WordsFilter extends React.Component {
         filterState: false
     };
     changeFilterState = () => {
-        console.log(this);
         if(this.state.allWords) {
             this.setState({allWords: false});
         } else {

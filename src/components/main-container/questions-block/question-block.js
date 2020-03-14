@@ -4,22 +4,18 @@ import {connect} from "react-redux";
 class QuestionBlock extends React.Component {
     componentDidMount() {
         this.props.setQuestionComponentWithFilterID();
-        // setInterval(() => {
-        //     this.props.setQuestionComponentWithFilterID();
-        // }, 1000);
     }
 
     render() {
-        console.log("QUESTION BLOCK WAS RERENDERED!");
+        const {currentQuestionComponent} = this.props;
         return (
-            (this.props.currentQuestionComponent === null) ? <div>Загрузка</div> : this.props.currentQuestionComponent
+            (currentQuestionComponent === null) ? <div>Wählen Sie mindestens ein Typ der Aufgabe!</div> : currentQuestionComponent
         )
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        filterSettings: state.filterSettings,
         currentQuestionComponent: state.currentQuestionComponent
     }
 };

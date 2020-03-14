@@ -24,8 +24,24 @@ function resetMarkNodeStyle (node) {
     node.scrollBy(); /* trigger reflow */
 }
 
+function updateDatabasePoints (points) {
+    if(store.getState().loginStatus) {
+        fetch(`http://127.0.0.1:3001/setpoints`, {
+            method: "POST",
+            body: JSON.stringify({points, token: window.localStorage.getItem(`token`)})
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                store.dispatch({type: "SET_USER_POINTS", points: data.points});
+            })
+    }
+};
+
 export {
     callNextQuestion,
     replaceAllLettersToEnglish,
-    resetMarkNodeStyle
+    resetMarkNodeStyle,
+    updateDatabasePoints
 }

@@ -5,14 +5,55 @@
   top: 0;
   background-color: #ff7d14;
   text-transform: uppercase;
+  z-index: 9999;
   &_logo {
     font-family: 'Trade Winds', cursive;
     font-size: 22px;
+    a {
+      color: #000000;
+    }
   }
   &_login {
     font-size: 15px;
+    &_button {
+      background-color: #ff7d14;
+      border: none;
+      text-decoration: underline;
+      letter-spacing: 0.7px;
+      &:hover {
+        font-weight: bold;
+      }
+      &:focus {
+        outline: none;
+      }
+    }
   }
   &_online {
     font-size: 15px;
+  }
+}
+@media screen and (max-width: 991px) {
+  .header {
+    &_logo {
+      font-size: 17px;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .header {
+    &_logo {
+      font-size: 12px;
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .header {
+    &_logo {
+      font-size: 14px;
+      display: none;
+    }
   }
 }
