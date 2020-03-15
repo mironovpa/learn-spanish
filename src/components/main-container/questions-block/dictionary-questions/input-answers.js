@@ -49,7 +49,7 @@ class InputAnswers extends React.Component {
                         errors: errors + 1
                     }
                 }, () => {
-                    if(errors === 3) {
+                    if(this.state.errors === 3) {
                         this.setState({sendButtonDisabled: true});
                         document.getElementById("input_answers_input_area").style.color = "green";
                         document.getElementById("input_answers_input_area").value = question.spanish;
