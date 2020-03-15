@@ -40,7 +40,8 @@ const initialState = {
         login: null,
         email: null,
         points: null
-    }
+    },
+    serverURL: `https://learn-spain-server.herokuapp.com/`
 }
 
 

@@ -45,7 +45,7 @@ class Login extends React.Component {
     onLoginDone = () => {
         const {loginData} = this.state;
         if(loginData.login.length <= 24 && loginData.email.length <= 24) {
-            fetch(`http://127.0.0.1:3001/login`, {
+            fetch(`${this.props.serverURL}login`, {
                 method: 'POST',
                 body: JSON.stringify(loginData)
             })
@@ -118,6 +118,7 @@ class Login extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
+        serverURL: state.serverURL
     }
 };
 

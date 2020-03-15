@@ -1,9 +1,10 @@
 const http = require('http');
 const mysql = require('mysql');
 const md5 = require('md5');
-const cron = require('node-cron');
-const hostname = '127.0.0.1';
-const port = 3001;
+// const cron = require('node-cron');
+const hostname = '0.0.0.0';
+const port = process.env.PORT || 3000;
+
 
 let ipsArray = [];
 const SESSION_TIME = 120000 // MS  = 2 Mins
@@ -86,7 +87,7 @@ const server = http.createServer((req, res) => {
                     else {
                         if(response.length === 0) {
                             console.log("Добавляем пользователя!", data);
-                            connection.query(`INSERT INTO users (name, mail) VALUES ('${data.login}', '${data.email}')`, (err, response_) => {
+                            connection.query(`INSERT INTO users (name, mail, token) VALUES ('${data.login}', '${data.email}', '${md5(data.login+data.email)}')`, (err, response_) => {
                                 if(err) console.log(err);
                                 else {
                                     res.end(JSON.stringify({status: "ok", login: data.login, email: data.email, points: 0, token: md5(`${data.login}${data.email}`)}));
@@ -198,9 +199,9 @@ server.listen(port, hostname, () => {
 
 const connection = mysql.createConnection(
     {
-        host: "localhost",
-        user: "root",
-        password: "",
+        host: "db4free.net",
+        user: "adminner",
+        password: "12345678",
         database: "learn_spanish"
     }
 );
@@ -210,10 +211,10 @@ connection.connect((err) => {
     else console.log("Connected!");
 });
 
-cron.schedule(`0 0 * * *`, function () {
-    console.log(`Running Cron Job`);
-    connection.query(`UPDATE users SET today_score = 0`);
-});
+// cron.schedule(`0 0 * * *`, function () {
+//     console.log(`Running Cron Job`);
+//     connection.query(`UPDATE users SET today_score = 0`);
+// });
 
 // connection.query(`SELECT * FROM users`, (err, res) => {
 //     if(err) return err;

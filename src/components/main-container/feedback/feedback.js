@@ -1,6 +1,7 @@
 import React from "react";
+import {connect} from "react-redux";
 
-export default class Feedback extends React.Component {
+class Feedback extends React.Component {
     state = {
         formData: {
             name: null,
@@ -36,7 +37,7 @@ export default class Feedback extends React.Component {
     onFeedbackSent = (event) => {
         event.preventDefault();
         const {name, text} = this.state.formData;
-        fetch(`http://127.0.0.1:3001/feedback`, {
+        fetch(`${this.props.serverURL}feedback`, {
             method: "POST",
             body: JSON.stringify({name, text})
         })
@@ -80,3 +81,16 @@ export default class Feedback extends React.Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        serverURL: state.serverURL
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Feedback);

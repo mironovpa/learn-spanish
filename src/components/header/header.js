@@ -16,7 +16,7 @@ class Header extends React.Component {
     }
     componentDidMount() {
         const intervalID = setInterval(() => {
-            fetch(`http://127.0.0.1:3001/online`)
+            fetch(`${this.props.serverURL}online`)
                 .then((res) => {
                     return res.text();
                 })
@@ -89,7 +89,8 @@ class Header extends React.Component {
 const mapStateToProps = (state) => {
     return {
         loginStatus: state.loginStatus,
-        userData: state.userData
+        userData: state.userData,
+        serverURL: state.serverURL
     }
 };
 

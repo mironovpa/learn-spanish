@@ -1,6 +1,7 @@
 import React from "react";
 import "./stats.scss";
-export default class Stats extends React.Component {
+import {connect} from "react-redux";
+class Stats extends React.Component {
     state = {
         stats: {
             overall: [
@@ -16,7 +17,7 @@ export default class Stats extends React.Component {
     };
 
     loadStatsData = () => {
-        fetch(`http://127.0.0.1:3001/stats`)
+        fetch(`${this.props.serverURL}stats`)
             .then((res) => {
                 return res.text();
             })
@@ -134,3 +135,22 @@ export default class Stats extends React.Component {
         }
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        serverURL: state.serverURL
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        setLoginStatusFalse: () => {
+            dispatch({type: "SET_LOGIN_STATUS_FALSE"});
+        },
+        resetLoginData: () => {
+            dispatch({type: "RESET_LOGIN_DATA"});
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Stats);

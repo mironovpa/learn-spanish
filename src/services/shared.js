@@ -26,7 +26,7 @@ function resetMarkNodeStyle (node) {
 
 function updateDatabasePoints (points) {
     if(store.getState().loginStatus) {
-        fetch(`http://127.0.0.1:3001/setpoints`, {
+        fetch(`${store.getState().serverURL}setpoints`, {
             method: "POST",
             body: JSON.stringify({points, token: window.localStorage.getItem(`token`)})
         })

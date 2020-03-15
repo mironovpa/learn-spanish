@@ -15,7 +15,7 @@ class App extends React.Component {
         if(loginStatus === false) {
             const token = window.localStorage.getItem(`token`);
             if(token) {
-                fetch(`http://127.0.0.1:3001/checklogin`, {
+                fetch(`${this.props.serverURL}checklogin`, {
                     method: 'POST',
                     body: JSON.stringify(token)
                 })
@@ -51,7 +51,8 @@ class App extends React.Component {
 const mapStateToProps = (state) => {
     return {
         loginStatus: state.loginStatus,
-        userData: state.loginData
+        userData: state.loginData,
+        serverURL: state.serverURL
     }
 };
 
