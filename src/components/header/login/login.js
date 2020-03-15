@@ -53,7 +53,6 @@ class Login extends React.Component {
                 return response.json();
             })
             .then((data) => {
-                console.log(data);
                 const {status, reason, login, email, points} = data;
                 const {setLoginStatusTrue, setLoginData} = this.props;
                 if(status === "ok") {

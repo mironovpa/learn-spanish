@@ -14,7 +14,7 @@ class DictionaryQuestions extends React.Component {
     }
     getRandomNotPhraseQuestion = () => {
         const {dictionary} = this.props;
-        const dictionaryWithoutPhrases = dictionary.filter((el) => el.speech !== "phrase");
+        const dictionaryWithoutPhrases = dictionary.filter((el) => (el.speech !== "phrase" && el.speech !== "question"));
         return dictionaryWithoutPhrases[Math.floor(Math.random()*dictionaryWithoutPhrases.length)]
     }
     getAllAnswersArray = () => {
