@@ -7,7 +7,7 @@ const port = process.env.PORT || 3000;
 
 
 let ipsArray = [];
-const SESSION_TIME = 120000 // MS  = 2 Mins
+const SESSION_TIME = 120000; // MS  = 2 Mins
 
 function sortArray (a, b) {
     return b.score - a.score;
@@ -26,7 +26,6 @@ const server = http.createServer((req, res) => {
             connection.query(`SELECT * FROM users`, (err, data) => {
                 if(err) return console.log(err);
                 else {
-                    // console.log(data)
                     const total_scores_array = data.map(el => {
                         const {name, total_score} = el;
                         return {
@@ -41,9 +40,6 @@ const server = http.createServer((req, res) => {
                                 score: today_score
                             }
                         });
-
-                    // console.log(total_scores_array);
-                    // console.log(today_scores_array);
                     res.statusCode = 200;
                     res.end(JSON.stringify([
                         total_scores_array.sort(sortArray).slice(0,10),
@@ -86,7 +82,6 @@ const server = http.createServer((req, res) => {
                     if(err) console.log(err);
                     else {
                         if(response.length === 0) {
-                            console.log("Добавляем пользователя!", data);
                             connection.query(`INSERT INTO users (name, mail, token) VALUES ('${data.login}', '${data.email}', '${md5(data.login+data.email)}')`, (err, response_) => {
                                 if(err) console.log(err);
                                 else {
@@ -95,10 +90,8 @@ const server = http.createServer((req, res) => {
                             })
                         } else {
                             if(response[0].mail === data.email) {
-                                console.log("Почта подошла!");
                                 res.end(JSON.stringify({status: "ok", login: data.login, email: data.email, points: response[0].total_score, token: md5(`${data.login}${data.email}`)}));
                             } else {
-                                console.log("Почта не подошла!");
                                 res.end(JSON.stringify({status: "fail", reason: "EMAIL_INCORRECT"}));
                             }
                         }
@@ -111,7 +104,6 @@ const server = http.createServer((req, res) => {
             let data;
             req.on('data', (chunk) => {
                 data = JSON.parse(`${chunk}`);
-                console.log(data);
                 if(data) {
                     connection.query(`SELECT * FROM users WHERE token = '${data}'`, (err, response) => {
                         if(err) return console.log(err);
@@ -133,20 +125,15 @@ const server = http.createServer((req, res) => {
             let data;
             req.on('data', (chunk) => {
                 data = JSON.parse(`${chunk}`);
-                console.log(data);
                 if(data) {
                     connection.query(`SELECT * FROM users WHERE token = '${data.token}'`, (err, response) => {
                         if(err) return console.log(err);
                         else {
                             if(response.length === 1) {
-                                console.log(`${response[0].total_score + data.points}`);
-                                console.log(`${response[0].today_score + data.points}`);
-
                                 connection.query(`UPDATE users SET total_score = ${response[0].total_score + data.points}, today_score = ${response[0].today_score + data.points} WHERE token = '${data.token}'`,
                                     (err, response_) => {
                                     if(err) console.log(err);
                                     else {
-                                        console.log(response_);
                                         res.end(JSON.stringify({status: true, points: response[0].total_score + data.points}));
                                     }
                                 })
@@ -168,12 +155,10 @@ const server = http.createServer((req, res) => {
             let data;
             req.on('data', (chunk) => {
                 data = JSON.parse(`${chunk}`);
-                console.log(data);
                 if(data) {
                     connection.query(`INSERT INTO messages (name, text) VALUES ('${data.name}', '${data.text}')`, (err, response) => {
                         if(err) console.log(err);
                         else {
-                            console.log(response);
                             res.end(JSON.stringify({status: true}));
                         }
                     })
@@ -199,10 +184,10 @@ server.listen(port, hostname, () => {
 
 const connection = mysql.createConnection(
     {
-        host: "db4free.net",
-        user: "adminner",
-        password: "12345678",
-        database: "learn_spanish"
+        host: "",
+        user: "",
+        password: "",
+        database: ""
     }
 );
 
@@ -216,13 +201,3 @@ connection.connect((err) => {
 //     connection.query(`UPDATE users SET today_score = 0`);
 // });
 
-// connection.query(`SELECT * FROM users`, (err, res) => {
-//     if(err) return err;
-//     else {
-//         for (let i = 0; i < res.length; i++) {
-//             connection.query(`UPDATE users SET token = '${md5(`${res[i].name}${res[i].mail}`)}' WHERE id = ${i+1}`, (err, res_) => {
-//                 console.log(res_);
-//             });
-//         }
-//     }
-// })
